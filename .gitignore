@@ -34,3 +34,4 @@ build/
 
 ### Project ###
 CentralAPI/src/main/resources/application-local.properties
+.env
