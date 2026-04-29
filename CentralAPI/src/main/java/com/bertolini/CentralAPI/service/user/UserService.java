@@ -49,6 +49,10 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
     public int resetAllUserRequests() {
         return userRepository.resetAllUserRequests();
     }

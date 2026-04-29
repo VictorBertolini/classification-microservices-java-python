@@ -7,12 +7,14 @@ import com.bertolini.CentralAPI.service.classification.ClassificationService;
 import com.bertolini.CentralAPI.service.requestServices.RequestValidationService;
 import com.bertolini.CentralAPI.service.user.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("user/{userId}/classify")
+@RequestMapping("/classify")
 public class ClassifierController {
 
     private final ClassificationService classificationService;
@@ -26,18 +28,18 @@ public class ClassifierController {
     }
 
     @PostMapping
-    public ResponseEntity<TextClassifiedResponse> classify(@PathVariable Long userId, @RequestBody TextClassifyRequest textClassifyRequest) {
-        User user = userService.findByUserId(userId);
+    @Transactional
+    public ResponseEntity<TextClassifiedResponse> classify(@AuthenticationPrincipal User loggedUser, @RequestBody TextClassifyRequest textClassifyRequest) {
         requestValidationService.execute(textClassifyRequest);
-        TextClassifiedResponse response = classificationService.classify(user, textClassifyRequest);
+        TextClassifiedResponse response = classificationService.classify(loggedUser, textClassifyRequest);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/batch")
-    public ResponseEntity<List<TextClassifiedResponse>> classify(@PathVariable Long userId, @RequestBody List<TextClassifyRequest> requests) {
-        User user = userService.findByUserId(userId);
+    @Transactional
+    public ResponseEntity<List<TextClassifiedResponse>> classify(@AuthenticationPrincipal User loggedUser, @RequestBody List<TextClassifyRequest> requests) {
         requestValidationService.execute(requests);
-        List<TextClassifiedResponse> response = classificationService.classifyBatch(user, requests);
+        List<TextClassifiedResponse> response = classificationService.classifyBatch(loggedUser, requests);
         return ResponseEntity.ok(response);
     }
 }

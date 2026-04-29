@@ -3,6 +3,7 @@ package com.bertolini.CentralAPI.service.classification;
 import com.bertolini.CentralAPI.domain.TextClassify;
 import com.bertolini.CentralAPI.domain.User;
 import com.bertolini.CentralAPI.repository.TextClassifyRepository;
+import com.bertolini.CentralAPI.repository.UserRepository;
 import com.bertolini.CentralAPI.schema.error.InsufficientRequestsException;
 import com.bertolini.CentralAPI.schema.text.TextClassifiedResponse;
 import com.bertolini.CentralAPI.schema.text.TextClassifyRequest;
@@ -17,10 +18,12 @@ public class ClassificationService {
 
     private final ClassifyApiClient classifyApiClient;
     private final TextClassifyRepository repository;
+    private final UserRepository userRepository;
 
-    public ClassificationService(ClassifyApiClient classifyApiClient, TextClassifyRepository repository) {
+    public ClassificationService(ClassifyApiClient classifyApiClient, TextClassifyRepository repository, UserRepository userRepository) {
         this.classifyApiClient = classifyApiClient;
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -29,11 +32,10 @@ public class ClassificationService {
         if (user.getRequestsRemain() <= 0) {
             throw new InsufficientRequestsException("User " + user.getEmail() + " has " + user.getRequestsRemain() + " insufficient to finished the request");
         }
-
         response = this.classifyApiClient.send(textClassifyRequest);
         user.setRequestsRemain(user.getRequestsRemain() - 1);
+        userRepository.save(user);
         this.repository.save(new TextClassify(user, response));
-
         return response;
     }
 
@@ -46,6 +48,7 @@ public class ClassificationService {
 
         response = this.classifyApiClient.send(requests);
         user.setRequestsRemain(user.getRequestsRemain() - requests.size());
+        userRepository.save(user);
         this.repository.saveAll(response.stream().map(r -> new TextClassify(user, r)).toList());
 
         return response;

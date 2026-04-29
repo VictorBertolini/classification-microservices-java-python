@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,10 +41,9 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @GetMapping("/{userId}/remain-requests")
-    public ResponseEntity<RemainingRequestsDTO> getRemainingRequests(@PathVariable Long userId) {
-        User user = userService.findByUserId(userId);
-        return ResponseEntity.ok(new RemainingRequestsDTO(user));
+    @GetMapping("/remain-requests")
+    public ResponseEntity<RemainingRequestsDTO> getRemainingRequests(@AuthenticationPrincipal User loggedUser) {
+        return ResponseEntity.ok(new RemainingRequestsDTO(loggedUser));
     }
 
     @PostMapping
@@ -51,24 +51,23 @@ public class UserController {
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest, UriComponentsBuilder uriComponentsBuilder) {
         User user = new User(userRequest);
         userService.save(user);
-        URI uri = uriComponentsBuilder.path("/user/{user_id}").buildAndExpand(user.getUserId()).toUri();
+        URI uri = uriComponentsBuilder.path("/user").buildAndExpand().toUri();
 
         return ResponseEntity.created(uri).body(new UserResponse(user));
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     @Transactional
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable Long userId) {
-        userService.deleteById(userId);
+    public ResponseEntity<UserResponse> deleteUser(@AuthenticationPrincipal User loggedUser) {
+        userService.delete(loggedUser);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping
     @Transactional
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
-        User user = userService.findByUserId(userId);
-        user.update(userUpdateRequest);
-        return ResponseEntity.ok(new UserResponse(user));
+    public ResponseEntity<UserResponse> updateUser(@AuthenticationPrincipal User loggedUser, @RequestBody UserUpdateRequest userUpdateRequest) {
+        loggedUser.update(userUpdateRequest);
+        return ResponseEntity.ok(new UserResponse(loggedUser));
     }
 
 }

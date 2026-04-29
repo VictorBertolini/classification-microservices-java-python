@@ -20,5 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "   WHEN 'ADMIN'   THEN 10000" +
             "END"
     )
-    public int resetAllUserRequests();
+    int resetAllUserRequests();
 }
