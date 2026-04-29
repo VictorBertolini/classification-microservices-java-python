@@ -109,18 +109,35 @@ public class ErrorTreatment {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity tratarErroBadCredentials() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    public ResponseEntity<ErrorResponse> treatBadCredentialsError() {
+        int status = 401;
+        ErrorResponse response = new ErrorResponse(
+                status,
+                "Bad Credentials",
+                "Check your email and password"
+        );
+        return ResponseEntity.status(status).body(response);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity tratarErroAuthentication() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication Failed");
+    public ResponseEntity<ErrorResponse> treatAuthenticationError() {
+        int status = 401;
+        ErrorResponse response = new ErrorResponse(
+                status,
+                "Authentication Error",
+                "User can't be Authenticated"
+        );
+        return ResponseEntity.status(status).body(response);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity tratarErroAcessoNegado() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acess Denied");
+    public ResponseEntity<ErrorResponse> treatAccessDenied() {
+        int status = 403;
+        ErrorResponse response = new ErrorResponse(
+                status,
+                "Access Denied",
+                "Access can't be made"
+        );
+        return ResponseEntity.status(status).body(response);
     }
-
 }

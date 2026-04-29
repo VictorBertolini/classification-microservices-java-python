@@ -66,7 +66,7 @@ public class UserController {
     @PutMapping
     @Transactional
     public ResponseEntity<UserResponse> updateUser(@AuthenticationPrincipal User loggedUser, @RequestBody UserUpdateRequest userUpdateRequest) {
-        loggedUser.update(userUpdateRequest);
+        userService.update(loggedUser, userUpdateRequest);
         return ResponseEntity.ok(new UserResponse(loggedUser));
     }
 

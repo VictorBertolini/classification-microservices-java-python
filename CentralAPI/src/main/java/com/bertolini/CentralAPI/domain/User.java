@@ -51,15 +51,6 @@ public class User implements UserDetails {
         this.requestsRemain = UserRole.FREE.getRequestLimit();
     }
 
-    public void update(UserUpdateRequest userUpdateRequest) {
-        if (userUpdateRequest.username() != null) {
-            this.username = userUpdateRequest.username();
-        }
-        if (userUpdateRequest.password() != null) {
-            this.password = userUpdateRequest.password();
-        }
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
@@ -70,5 +61,4 @@ public class User implements UserDetails {
         }
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
-
 }

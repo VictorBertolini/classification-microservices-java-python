@@ -3,6 +3,7 @@ package com.bertolini.CentralAPI.service.user;
 import com.bertolini.CentralAPI.domain.User;
 import com.bertolini.CentralAPI.repository.UserRepository;
 import com.bertolini.CentralAPI.schema.error.UserNotFoundException;
+import com.bertolini.CentralAPI.schema.user.UserUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +56,15 @@ public class UserService {
 
     public int resetAllUserRequests() {
         return userRepository.resetAllUserRequests();
+    }
+
+    public void update(User user, UserUpdateRequest userUpdateRequest) {
+        if (userUpdateRequest.username() != null) {
+            user.setUsername(userUpdateRequest.username());
+        }
+        if (userUpdateRequest.password() != null) {
+            user.setPassword(passwordEncoder.encode(userUpdateRequest.password()));
+        }
     }
 
 }
