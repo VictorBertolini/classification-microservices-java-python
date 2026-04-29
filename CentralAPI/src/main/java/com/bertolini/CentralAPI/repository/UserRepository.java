@@ -1,14 +1,14 @@
 package com.bertolini.CentralAPI.repository;
 
 import com.bertolini.CentralAPI.domain.User;
-import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface UserRepository extends JpaRepository<@NonNull User, @NonNull Long> {
-    public User findByUserId(Long userId);
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserId(Long userId);
+    User findUserByEmail(String email);
 
     @Modifying
     @Transactional

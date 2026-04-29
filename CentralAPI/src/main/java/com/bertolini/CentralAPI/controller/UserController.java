@@ -1,7 +1,6 @@
 package com.bertolini.CentralAPI.controller;
 
 import com.bertolini.CentralAPI.domain.User;
-import com.bertolini.CentralAPI.schema.error.UserNotFoundException;
 import com.bertolini.CentralAPI.schema.page.PageResponse;
 import com.bertolini.CentralAPI.schema.user.RemainingRequestsDTO;
 import com.bertolini.CentralAPI.schema.user.UserRequest;
