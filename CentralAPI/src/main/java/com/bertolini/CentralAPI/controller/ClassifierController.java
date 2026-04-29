@@ -28,7 +28,6 @@ public class ClassifierController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<TextClassifiedResponse> classify(@AuthenticationPrincipal User loggedUser, @RequestBody TextClassifyRequest textClassifyRequest) {
         requestValidationService.execute(textClassifyRequest);
         TextClassifiedResponse response = classificationService.classify(loggedUser, textClassifyRequest);
@@ -36,7 +35,6 @@ public class ClassifierController {
     }
 
     @PostMapping("/batch")
-    @Transactional
     public ResponseEntity<List<TextClassifiedResponse>> classify(@AuthenticationPrincipal User loggedUser, @RequestBody List<TextClassifyRequest> requests) {
         requestValidationService.execute(requests);
         List<TextClassifiedResponse> response = classificationService.classifyBatch(loggedUser, requests);

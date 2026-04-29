@@ -23,7 +23,7 @@ public class AuthenticationController {
     private AuthenticationManager manager;
 
     @PostMapping
-    public ResponseEntity userLogin(@RequestBody @Valid UserAuthenticationData data) {
+    public ResponseEntity<JWTTokenDTO> userLogin(@RequestBody @Valid UserAuthenticationData data) {
         var token = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var authentication = manager.authenticate(token);
 
@@ -31,5 +31,4 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new JWTTokenDTO(tokenJWT));
     }
-
 }

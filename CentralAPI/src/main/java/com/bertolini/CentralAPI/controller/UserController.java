@@ -51,7 +51,7 @@ public class UserController {
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest, UriComponentsBuilder uriComponentsBuilder) {
         User user = new User(userRequest);
         userService.save(user);
-        URI uri = uriComponentsBuilder.path("/user").buildAndExpand().toUri();
+        URI uri = uriComponentsBuilder.path("/user/{user_id}").buildAndExpand(user.getUserId()).toUri();
 
         return ResponseEntity.created(uri).body(new UserResponse(user));
     }
@@ -69,5 +69,4 @@ public class UserController {
         userService.update(loggedUser, userUpdateRequest);
         return ResponseEntity.ok(new UserResponse(loggedUser));
     }
-
 }
