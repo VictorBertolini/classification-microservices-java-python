@@ -17,5 +17,4 @@ public record RemainingRequestsDTO(
     public RemainingRequestsDTO(User user) {
         this(user.getUserId(), user.getUsername(), user.getEmail(), user.getRequestsRemain());
     }
-
 }

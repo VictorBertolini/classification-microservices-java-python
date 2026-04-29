@@ -5,14 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UserResponse(
-        @NotNull
         Long id,
-        @NotBlank
         String username,
-        @NotBlank
         String email
 ) {
-
     public UserResponse(User user) {
         this(user.getUserId(), user.getUsername(), user.getEmail());
     }
