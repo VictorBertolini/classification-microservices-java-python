@@ -43,13 +43,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteById(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User with id: " + id + " not found. Can't be deleted.");
-        }
-        userRepository.deleteById(id);
-    }
-
     public void delete(User user) {
         userRepository.delete(user);
     }
@@ -66,5 +59,4 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(userUpdateRequest.password()));
         }
     }
-
 }
