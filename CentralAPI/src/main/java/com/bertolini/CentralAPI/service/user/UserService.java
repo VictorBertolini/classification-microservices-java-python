@@ -1,11 +1,14 @@
 package com.bertolini.CentralAPI.service.user;
 
 import com.bertolini.CentralAPI.domain.User;
+import com.bertolini.CentralAPI.domain.UserRole;
 import com.bertolini.CentralAPI.repository.UserRepository;
 import com.bertolini.CentralAPI.schema.error.UserNotFoundException;
 import com.bertolini.CentralAPI.schema.user.UserUpdateRequest;
+import com.bertolini.CentralAPI.schema.user.UserUpdateRoleRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +61,15 @@ public class UserService {
         if (userUpdateRequest.password() != null) {
             user.setPassword(passwordEncoder.encode(userUpdateRequest.password()));
         }
+    }
+
+    public void updateRole(User loggedUser, UserUpdateRoleRequest request) {
+        if (loggedUser.getRole() != UserRole.ADMIN)
+            throw new AuthorizationServiceException("User: " + loggedUser.getUsername() + " must be ADMIN to make this action");
+
+        User user = findByUserEmail(request.email());
+
+        user.setRole(request.role());
+        user.setRequestsRemain(request.role().getRequestLimit());
     }
 }

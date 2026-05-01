@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers("/login").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/user/**").hasAuthority("ROLE_ADMIN");
+                    req.requestMatchers(HttpMethod.PUT, "/user/role").hasAuthority("ROLE_ADMIN");
                     req.requestMatchers(HttpMethod.POST, "/user").permitAll();
 
                     req.anyRequest().authenticated();

@@ -2,10 +2,7 @@ package com.bertolini.CentralAPI.controller;
 
 import com.bertolini.CentralAPI.domain.User;
 import com.bertolini.CentralAPI.schema.page.PageResponse;
-import com.bertolini.CentralAPI.schema.user.RemainingRequestsDTO;
-import com.bertolini.CentralAPI.schema.user.UserRequest;
-import com.bertolini.CentralAPI.schema.user.UserResponse;
-import com.bertolini.CentralAPI.schema.user.UserUpdateRequest;
+import com.bertolini.CentralAPI.schema.user.*;
 import com.bertolini.CentralAPI.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -67,6 +64,13 @@ public class UserController {
     @Transactional
     public ResponseEntity<UserResponse> updateUser(@AuthenticationPrincipal User loggedUser, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.update(loggedUser, userUpdateRequest);
+        return ResponseEntity.ok(new UserResponse(loggedUser));
+    }
+
+    @PutMapping("/role")
+    @Transactional
+    public ResponseEntity<UserResponse> updateUserRole(@AuthenticationPrincipal User loggedUser, @RequestBody UserUpdateRoleRequest request) {
+        userService.updateRole(loggedUser, request);
         return ResponseEntity.ok(new UserResponse(loggedUser));
     }
 }

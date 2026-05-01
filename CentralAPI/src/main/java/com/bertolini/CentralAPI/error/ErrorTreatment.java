@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
@@ -137,6 +138,17 @@ public class ErrorTreatment {
                 status,
                 "Access Denied",
                 "Access can't be made"
+        );
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(AuthorizationServiceException.class)
+    public ResponseEntity<ErrorResponse> treatAuthorizationInsufficient() {
+        int status = 403;
+        ErrorResponse response = new ErrorResponse(
+                status,
+                "Access Denied",
+                "Authorization Insufficient"
         );
         return ResponseEntity.status(status).body(response);
     }
