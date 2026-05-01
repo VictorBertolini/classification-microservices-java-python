@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum UserRole {
-    ADMIN(10000),
+    ADMIN(1),
     PREMIUM(1000),
     FREE(100);
     
