@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "CASE u.role " +
             "   WHEN 'FREE'    THEN 100" +
             "   WHEN 'PREMIUM' THEN 1000" +
-            "   WHEN 'ADMIN'   THEN 10000" +
+            "   WHEN 'ADMIN'   THEN 1" +
             "END"
     )
     int resetAllUserRequests();
